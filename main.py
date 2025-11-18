@@ -57,12 +57,12 @@ def load_config():
     config_path = os.environ.get("CONFIG_PATH", "config/config.yaml")
 
     if not Path(config_path).exists():
-        raise FileNotFoundError(f"配置文件 {config_path} 不存在")
+        raise FileNotFoundError(f"설정 파일 {config_path}을(를) 찾을 수 없습니다")
 
     with open(config_path, "r", encoding="utf-8") as f:
         config_data = yaml.safe_load(f)
 
-    print(f"配置文件加载成功: {config_path}")
+    print(f"설정 파일 로드 성공: {config_path}")
 
     # 构建配置
     config = {
@@ -197,25 +197,25 @@ def load_config():
         chat_source = "环境变量" if os.environ.get("TELEGRAM_CHAT_ID") else "配置文件"
         notification_sources.append(f"Telegram({token_source}/{chat_source})")
     if config["EMAIL_FROM"] and config["EMAIL_PASSWORD"] and config["EMAIL_TO"]:
-        from_source = "环境变量" if os.environ.get("EMAIL_FROM") else "配置文件"
-        notification_sources.append(f"邮件({from_source})")
+        from_source = "환경변수" if os.environ.get("EMAIL_FROM") else "설정파일"
+        notification_sources.append(f"이메일({from_source})")
 
     if config["NTFY_SERVER_URL"] and config["NTFY_TOPIC"]:
-        server_source = "环境变量" if os.environ.get("NTFY_SERVER_URL") else "配置文件"
+        server_source = "환경변수" if os.environ.get("NTFY_SERVER_URL") else "설정파일"
         notification_sources.append(f"ntfy({server_source})")
 
     if notification_sources:
-        print(f"通知渠道配置来源: {', '.join(notification_sources)}")
+        print(f"알림 채널 설정: {', '.join(notification_sources)}")
     else:
-        print("未配置任何通知渠道")
+        print("설정된 알림 채널이 없습니다")
 
     return config
 
 
-print("正在加载配置...")
+print("설정을 로드하는 중...")
 CONFIG = load_config()
-print(f"TrendRadar v{VERSION} 配置加载完成")
-print(f"监控平台数量: {len(CONFIG['PLATFORMS'])}")
+print(f"TrendRadar v{VERSION} 설정 로드 완료")
+print(f"모니터링 플랫폼 수: {len(CONFIG['PLATFORMS'])}")
 
 
 # === 工具函数 ===

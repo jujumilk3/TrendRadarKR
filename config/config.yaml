@@ -1,82 +1,108 @@
 app:
   version_check_url: "https://raw.githubusercontent.com/sansan0/TrendRadar/refs/heads/master/version"
-  show_version_update: true # 控制显示版本更新提示，如果 false，则不接受新版本提示
+  show_version_update: true # 버전 업데이트 알림 표시 여부 (false: 알림 안 받음)
 
 crawler:
-  request_interval: 1000 # 请求间隔(毫秒)
-  enable_crawler: true # 是否启用爬取新闻功能，如果 false，则直接停止程序
-  use_proxy: false # 是否启用代理，false 时为关闭
+  request_interval: 1000 # 요청 간격(밀리초)
+  enable_crawler: true # 뉴스 크롤링 기능 활성화 여부 (false: 프로그램 중단)
+  use_proxy: false # 프록시 사용 여부 (false: 비활성화)
   default_proxy: "http://127.0.0.1:10086"
 
-# 🔸 daily（当日汇总模式）
-#   • 推送时机：按时推送(默认每小时推送一次)
-#   • 显示内容：当日所有匹配新闻 + 新增新闻区域
-#   • 适用场景：日报总结、全面了解当日热点趋势
+# 🔸 daily (일일 요약 모드)
+#   • 푸시 시점: 정시 푸시 (기본 1시간마다)
+#   • 표시 내용: 당일 모든 매칭 뉴스 + 신규 뉴스 영역
+#   • 활용 시나리오: 일일 리포트, 당일 인기 트렌드 전체 파악
 #
-# 🔸 current（当前榜单模式）
-#   • 推送时机：按时推送(默认每小时推送一次)
-#   • 显示内容：当前榜单匹配新闻 + 新增新闻区域
-#   • 适用场景：实时热点追踪、了解当前最火的内容
+# 🔸 current (현재 순위 모드)
+#   • 푸시 시점: 정시 푸시 (기본 1시간마다)
+#   • 표시 내용: 현재 순위 매칭 뉴스 + 신규 뉴스 영역
+#   • 활용 시나리오: 실시간 인기 추적, 현재 가장 핫한 콘텐츠 파악
 #
-# 🔸 incremental（增量监控模式）
-#   • 推送时机：有新增才推送
-#   • 显示内容：新出现的匹配频率词新闻
-#   • 适用场景：避免重复信息干扰
+# 🔸 incremental (증분 모니터링 모드)
+#   • 푸시 시점: 신규 항목이 있을 때만 푸시
+#   • 표시 내용: 새로 등장한 키워드 매칭 뉴스
+#   • 활용 시나리오: 중복 정보 간섭 방지
 
-# 推送模式选择
+# 푸시 모드 선택
 report:
-  mode: "daily" # 可选: "daily"|"incremental"|"current"
-  rank_threshold: 5 # 排名高亮阈值
+  mode: "daily" # 옵션: "daily"|"incremental"|"current"
+  rank_threshold: 5 # 순위 강조 표시 기준값
 
 notification:
-  enable_notification: true # 是否启用通知功能，如果 false，则不发送手机通知
-  message_batch_size: 4000 # 消息分批大小（字节）(这个配置别动)
-  dingtalk_batch_size: 20000 # 钉钉消息分批大小（字节）(这个配置也别动)
-  feishu_batch_size: 29000 # 飞书消息分批大小（字节）
-  batch_send_interval: 3 # 批次发送间隔（秒）
-  feishu_message_separator: "━━━━━━━━━━━━━━━━━━━" # feishu 消息分割线
+  enable_notification: true # 알림 기능 활성화 여부 (false: 알림 전송 안 함)
+  message_batch_size: 4000 # 메시지 배치 크기(바이트) (이 설정은 변경하지 마세요)
+  dingtalk_batch_size: 20000 # 딩톡 메시지 배치 크기(바이트) (이 설정도 변경하지 마세요)
+  feishu_batch_size: 29000 # 페이슈 메시지 배치 크기(바이트)
+  batch_send_interval: 3 # 배치 전송 간격(초)
+  feishu_message_separator: "━━━━━━━━━━━━━━━━━━━" # 페이슈 메시지 구분선
 
-  # 🕐 推送时间窗口控制（可选功能）
-  # 用途：限制推送的时间范围，避免非工作时间打扰
-  # 适用场景：
-  #   - 只想在工作日白天接收推送（如 09:00-18:00）
-  #   - 希望在晚上固定时间收到汇总（如 20:00-22:00）
+  # 🕐 푸시 시간대 제어 (선택 기능)
+  # 용도: 푸시 시간 범위 제한, 업무 외 시간 방해 방지
+  # 활용 시나리오:
+  #   - 평일 낮 시간대만 알림 받기 (예: 09:00-18:00)
+  #   - 저녁 특정 시간에 요약본 받기 (예: 20:00-22:00)
   push_window:
-    enabled: false  # 是否启用推送时间窗口控制，默认关闭
-    # 注意：GitHub Actions 执行时间不稳定，时间范围建议至少留足 2 小时
-    # 如果想要精准的定时推送，建议使用 Docker 部署在个人服务器上
+    enabled: false  # 푸시 시간대 제어 활성화 여부 (기본: 비활성화)
+    # 주의: GitHub Actions 실행 시간이 불안정하므로, 시간 범위는 최소 2시간 이상 설정 권장
+    # 정확한 정시 푸시를 원하면, Docker를 개인 서버에 배포하는 것을 권장
     time_range:
-      start: "20:00"  # 推送时间窗口开始（北京时间）
-      end: "22:00"    # 推送时间窗口结束（北京时间）
-    once_per_day: true  # 每天在时间窗口内只推送一次，如果 false，则窗口内每次执行都推送
-    push_record_retention_days: 7  # 推送记录保留天数
+      start: "20:00"  # 푸시 시간대 시작 (한국시간으로 변경 필요)
+      end: "22:00"    # 푸시 시간대 종료 (한국시간으로 변경 필요)
+    once_per_day: true  # 하루 한 번만 푸시 (false: 시간대 내 매번 실행 시 푸시)
+    push_record_retention_days: 7  # 푸시 기록 보관 일수
 
-  # 请务必妥善保管好 webhooks，不要公开
-  # 如果你以 fork 的方式将本项目部署在 GitHub 上，请勿在此填写任何 webhooks，而是将 webhooks 填入 GitHub Secret
-  # 不然轻则手机上收到奇怪的广告推送，重则存在更严重的安全隐患
+  # webhooks는 반드시 안전하게 보관하고 공개하지 마세요
+  # GitHub에 fork 방식으로 배포하는 경우, 여기에 webhooks를 입력하지 말고 GitHub Secret에 입력하세요
+  # 그렇지 않으면 이상한 광고 푸시를 받거나 심각한 보안 위험이 발생할 수 있습니다
   webhooks:
-    feishu_url: "" # 飞书机器人的 webhook URL
-    dingtalk_url: "" # 钉钉机器人的 webhook URL
-    wework_url: "" # 企业微信机器人的 webhook URL
-    telegram_bot_token: "" # Telegram Bot Token
-    telegram_chat_id: "" # Telegram Chat ID
-    email_from: "" # 发件人邮箱地址
-    email_password: "" # 发件人邮箱密码或授权码
-    email_to: "" # 收件人邮箱地址，多个收件人用逗号分隔
-    email_smtp_server: "" # SMTP服务器地址（可选，留空自动识别）
-    email_smtp_port: "" # SMTP端口（可选，留空自动识别）
-    ntfy_server_url: "https://ntfy.sh" # ntfy服务器地址，默认使用公共服务，可改为自托管地址
-    ntfy_topic: "" # ntfy主题名称
-    ntfy_token: "" # ntfy访问令牌（可选，用于私有主题）
+    feishu_url: "" # 페이슈 봇 webhook URL
+    dingtalk_url: "" # 딩톡 봇 webhook URL
+    wework_url: "" # 위워크(기업 위챗) 봇 webhook URL
+    telegram_bot_token: "" # 텔레그램 봇 토큰
+    telegram_chat_id: "" # 텔레그램 채팅 ID
+    email_from: "" # 발신 이메일 주소
+    email_password: "" # 발신 이메일 비밀번호 또는 앱 비밀번호
+    email_to: "" # 수신 이메일 주소 (여러 개는 쉼표로 구분)
+    email_smtp_server: "" # SMTP 서버 주소 (선택, 비워두면 자동 인식)
+    email_smtp_port: "" # SMTP 포트 (선택, 비워두면 자동 인식)
+    ntfy_server_url: "https://ntfy.sh" # ntfy 서버 주소 (기본: 공개 서비스, 자체 호스팅으로 변경 가능)
+    ntfy_topic: "" # ntfy 토픽 이름
+    ntfy_token: "" # ntfy 액세스 토큰 (선택, 비공개 토픽용)
 
-# 用于让关注度更高的新闻在更前面显示，即用算法重新组合不同平台的热搜排序形成你侧重的热搜，合起来是 1 就行
+# 관심도가 높은 뉴스를 앞쪽에 표시하기 위한 가중치 설정
+# 알고리즘으로 여러 플랫폼의 인기 검색어를 재조합하여 맞춤형 인기 순위 생성
+# 세 값의 합은 1이어야 함
 weight:
-  rank_weight: 0.6 # 排名权重
-  frequency_weight: 0.3 # 频次权重
-  hotness_weight: 0.1 # 热度权重
+  rank_weight: 0.6 # 순위 가중치
+  frequency_weight: 0.3 # 빈도 가중치
+  hotness_weight: 0.1 # 인기도 가중치
 
-# name 可以定义任意名称，只具有显示作用，即使项目运行了几天后，忽然改掉 name 也不会影响代码的正常运行
+# name은 임의로 설정 가능하며 표시용도로만 사용됨
+# 프로젝트 실행 후 name을 변경해도 코드 동작에 영향 없음
 platforms:
+  # 한국 뉴스 플랫폼
+  - id: "naver"
+    name: "네이버"
+  - id: "daum"
+    name: "다음"
+  - id: "theqoo"
+    name: "더쿠"
+  - id: "dcinside"
+    name: "디시인사이드"
+  - id: "fmkorea"
+    name: "에펨코리아"
+  - id: "clien"
+    name: "클리앙"
+  - id: "mlbpark"
+    name: "엠엘비파크"
+  - id: "instiz"
+    name: "인스티즈"
+  - id: "ruliweb"
+    name: "루리웹"
+  - id: "ygosu"
+    name: "와이고수"
+
+  # 중국 뉴스 플랫폼
   - id: "toutiao"
     name: "今日头条"
   - id: "baidu"
